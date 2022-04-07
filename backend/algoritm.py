@@ -1,13 +1,18 @@
 import sys
+import base64
+import hashlib
+from Crypto import Random
+from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import AES, PKCS1_OAEP
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
 
 # Cifra de cesar
 def cifra_cesar(input_string, shift):
     def rotate(ch, shift):
         if (ch.upper() not in ALPHABET):
-            return ch
+            return ''
         i = (ALPHABET.index(ch.upper()) + shift) % 26
         return ALPHABET[i]
     cipherText = ''
@@ -212,12 +217,12 @@ def generate_reflector(key):
             already_swaped.append(alpha[new_pos])
     return "".join(alpha)
 
-SECRET_KEY = "FX"
+SECRET_KEY = "the five boxing wizards jump quickly".upper()
 
 def generateCommunicationKey(SessionKey):
-    plain_text = SessionKey
-    key_one = ord(SECRET_KEY[0])
-    key_two = ord(SECRET_KEY[1])
+    plain_text = SECRET_KEY
+    key_one = int(SessionKey)
+    key_two = int(SessionKey)//2
 
     first_cypher = cifra_cesar(plain_text, key_one)
 
@@ -227,3 +232,34 @@ def generateCommunicationKey(SessionKey):
 
     second_cypher = machine.encipher(first_cypher)
     return second_cypher
+
+class AESCipher(object):
+
+    def __init__(self, key): 
+        self.bs = AES.block_size
+        self.key = hashlib.sha256(key.encode()).digest()
+
+    def encrypt(self, raw):
+        raw = self._pad(raw)
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return base64.b64encode(iv + cipher.encrypt(raw.encode()))
+
+    def decrypt(self, enc):
+        enc = base64.b64decode(enc)
+        iv = enc[:AES.block_size]
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
+
+    def _pad(self, s):
+        return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
+
+    @staticmethod
+    def _unpad(s):
+        return s[:-ord(s[len(s)-1:])]
+
+def RSA_encrypt(plain_text, public_key):
+    recipient_key = RSA.import_key(public_key)
+    cipher_rsa = PKCS1_OAEP.new(recipient_key)
+    enc_communication_key = cipher_rsa.encrypt(plain_text)
+    return enc_communication_key
