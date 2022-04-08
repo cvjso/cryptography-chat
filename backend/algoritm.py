@@ -5,6 +5,7 @@ from Crypto import Random
 from Crypto.Cipher import AES
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES, PKCS1_OAEP
+from rsa import PublicKey
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -219,7 +220,7 @@ def generate_reflector(key):
 
 SECRET_KEY = "the five boxing wizards jump quickly".upper()
 
-def generateCommunicationKey(SessionKey):
+def generate_communication_key(SessionKey):
     plain_text = SECRET_KEY
     key_one = int(SessionKey)
     key_two = int(SessionKey)//2
@@ -258,8 +259,15 @@ class AESCipher(object):
     def _unpad(s):
         return s[:-ord(s[len(s)-1:])]
 
+secret_code = "Unguessable"
+
+def get_public_key():
+    public_key = open("public_key.bin", "rb").read()
+    return public_key
+
+
 def RSA_encrypt(plain_text, public_key):
     recipient_key = RSA.import_key(public_key)
     cipher_rsa = PKCS1_OAEP.new(recipient_key)
-    enc_communication_key = cipher_rsa.encrypt(plain_text)
+    enc_communication_key = cipher_rsa.encrypt(plain_text.encode('utf-8'))
     return enc_communication_key

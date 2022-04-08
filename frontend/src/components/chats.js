@@ -1,9 +1,11 @@
 import { useCollectionData } from "react-firebase-hooks/firestore";
-
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { useState } from "react";
+import { decryptAES, encryptAES } from "../utils/AESAlgoritm";
+import { userStore } from "../store";
+import { doPost, ROUTES } from "../utils/requests";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCC1AgAz5_Y7k0rPUlxls7rkfAa6rwvJXM",
@@ -18,11 +20,32 @@ firebase.initializeApp({
 const firestore = firebase.firestore();
 
 export function ChatPage() {
+  // Store
+  const username = userStore((state) => state.username);
+  const communicationKey = userStore((state) => state.communicationKey);
+
+  // Get Messages from Firebase
   const messageRef = firestore.collection("messages");
   const query = messageRef.orderBy("createdAt").limit(25);
   const [messages] = useCollectionData(query, { idField: "id" });
 
   const [messageInput, setMessageInput] = useState("");
+
+  const sendMessage = () => {
+    const msg = encryptAES(messageInput, communicationKey);
+    console.log(msg);
+    doPost(ROUTES.sendMessage, {
+      username: username,
+      message: msg,
+    })
+      .then((response) => {
+        if (response.status === "200") {
+          console.log("tudo certo!");
+        }
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
@@ -36,13 +59,21 @@ export function ChatPage() {
             setMessageInput(e.target.value);
           }}
         />
-        <button>Submit</button>
+        <button onClick={sendMessage}>Submit</button>
       </div>
     </div>
   );
 }
 
 function ChatMessage(props) {
-  const { text, uid } = props.message;
-  return <p>{text}</p>;
+  const communicationKey = userStore((state) => state.communicationKey);
+
+  const { text, author } = props.message;
+  return (
+    <>
+      <h4>{author}:</h4>
+      {/* <p>{text}</p> */}
+      <p>{decryptAES(text, communicationKey)}</p>
+    </>
+  );
 }

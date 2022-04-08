@@ -1,16 +1,19 @@
 from crypt import methods
 from flask import Flask, request
-from algoritm import AESCipher, generateCommunicationKey
+from algoritm import AESCipher, generate_communication_key, RSA_encrypt, get_public_key
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import datetime
+from flask_cors import CORS, cross_origin
 
 cred = credentials.Certificate("./sdk-key.json")
 firebase_admin.initialize_app(cred)
 client = firestore.client()
 
 app = Flask(__name__)
+cors = CORS(app, supports_credentials=True)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/encrypt", methods=['POST'])
 def encrypt_message():
@@ -31,16 +34,20 @@ def add_user():
     client.collection("users").document(data["username"]).set({"CK": '', "username": data["username"], "password": data["password"]})
     return client.collection("users").document(data["username"]).get().to_dict()
 
-@app.route("/login", methods=["POST"])
+@app.route("/login/", methods=["POST"])
+@cross_origin()
 def login():
     data = request.get_json()
     user = client.collection("users").document(data["username"]).get().to_dict()
     if user["password"] == data["password"]:
-        communicationKey = generateCommunicationKey(data["session key"])
-        client.collection("users").document(data["username"]).set({"CK": communicationKey, "username": data["username"], "password": data["password"]})
-        return communicationKey
+        # public_key = client.collection("public key").document("key").get().to_dict()["public"]
+        communication_key = generate_communication_key(data["session key"])
+        encrypted_key = RSA_encrypt(communication_key, get_public_key())
+        client.collection("users").document(data["username"]).set({"CK": encrypted_key, "username": data["username"], "password": data["password"]})
+        return communication_key
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout/", methods=["POST"])
+@cross_origin()
 def logout():
     data = request.get_json()
     user = client.collection("users").document(data["username"]).get().to_dict()
@@ -48,11 +55,12 @@ def logout():
         client.collection("users").document(data["username"]).set({"CK": "", "username": data["username"], "password": data["password"]})
         return "Loged out"
 
-@app.route("/send_message", methods=["POST"])
+@app.route("/send_message/", methods=["POST"])
+@cross_origin()
 def send_message():
     now = datetime.now()
     timestamp = datetime.timestamp(now)
     data = request.get_json()
-    client.collection("messages").document(data["username"]).set({"message": data["message"], "author": data["username"], "createdAt": timestamp})
+    client.collection("messages").document().set({"text": data["message"], "author": data["username"], "createdAt": timestamp})
     # client.collection("messages").document(timestamp).set({"message": data["message"], "author": data["username"], "createdAt": timestamp})
     return "Message sent"

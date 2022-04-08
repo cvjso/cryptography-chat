@@ -1,16 +1,20 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 let user = (set) => ({
   isLogged: false,
   login: () => set(() => ({ isLogged: true })),
   logout: () => set(() => ({ isLogged: false })),
 
-  CommunicationKey: "",
-  setCommunicationKey: (param) => set(() => ({ CommunicationKey: param })),
+  communicationKey: "",
+  setCommunicationKey: (param) => set(() => ({ communicationKey: param })),
 
-  uuid: "",
-  setUuid: (param) => set(() => ({ uuid: param })),
+  username: "",
+  setUsername: (param) => set(() => ({ username: param })),
 });
+
+// user = persist(user)
 user = devtools(user);
+
 export const userStore = create(user);
