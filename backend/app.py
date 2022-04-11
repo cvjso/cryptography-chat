@@ -64,3 +64,6 @@ def send_message():
     client.collection("messages").document().set({"text": data["message"], "author": data["username"], "createdAt": timestamp})
     # client.collection("messages").document(timestamp).set({"message": data["message"], "author": data["username"], "createdAt": timestamp})
     return "Message sent"
+
+if __name__ == "__main__":
+    app.run()
