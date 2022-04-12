@@ -1,0 +1,26 @@
+#mine{
+    display: flex;
+    justify-content: flex-end;
+}
+
+#others{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.chat{
+    margin-top: 5%;
+    border: 5px solid #7fbff3;
+    border-radius: 10px;
+    background: #7fbff3;
+}
+
+.message-container{
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.message-container input{
+    width: 80%;
+    border-radius: 10px;
+}

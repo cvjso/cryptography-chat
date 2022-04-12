@@ -6,6 +6,7 @@ import { useState } from "react";
 import { decryptAES, encryptAES } from "../utils/AESAlgoritm";
 import { userStore } from "../store";
 import { doPost, ROUTES } from "../utils/requests";
+import "./chats.css";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCC1AgAz5_Y7k0rPUlxls7rkfAa6rwvJXM",
@@ -33,7 +34,6 @@ export function ChatPage() {
 
   const sendMessage = () => {
     const msg = encryptAES(messageInput, communicationKey);
-    console.log(msg);
     doPost(ROUTES.sendMessage, {
       username: username,
       message: msg,
@@ -41,17 +41,17 @@ export function ChatPage() {
       .then((response) => {
         if (response.status === "200") {
           console.log("tudo certo!");
+          setMessageInput("");
         }
-        console.log(response);
       })
       .catch((error) => console.log(error));
   };
 
   return (
-    <div>
+    <div className="chat">
       {messages &&
         messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
-      <div>
+      <div className="message-container">
         <input
           type="text"
           value={messageInput}
@@ -59,7 +59,7 @@ export function ChatPage() {
             setMessageInput(e.target.value);
           }}
         />
-        <button onClick={sendMessage}>Submit</button>
+        <button onClick={sendMessage}>Enviar mensagem</button>
       </div>
     </div>
   );
@@ -67,13 +67,16 @@ export function ChatPage() {
 
 function ChatMessage(props) {
   const communicationKey = userStore((state) => state.communicationKey);
+  const username = userStore((state) => state.username);
 
   const { text, author } = props.message;
   return (
     <>
-      <h4>{author}:</h4>
+      <h4 id={author === username ? "mine" : "others"}>{author}</h4>
       {/* <p>{text}</p> */}
-      <p>{decryptAES(text, communicationKey)}</p>
+      <p id={author === username ? "mine" : "others"}>
+        {decryptAES(text, communicationKey)}
+      </p>
     </>
   );
 }

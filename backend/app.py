@@ -44,7 +44,7 @@ def login():
         communication_key = generate_communication_key(data["session key"])
         encrypted_key = RSA_encrypt(communication_key, get_public_key())
         client.collection("users").document(data["username"]).set({"CK": encrypted_key, "username": data["username"], "password": data["password"]})
-        return communication_key
+        return encrypted_key
 
 @app.route("/logout/", methods=["POST"])
 @cross_origin()

@@ -79,7 +79,6 @@ export function encryptRSA(plainText) {
 
 export function decryptRSA(encrypted) {
   let utf8Encode = new TextEncoder();
-  // utf8Encode.encode("abc")
   let decrypt = new JSEncrypt();
   decrypt.setPrivateKey(utf8Encode.encode(privateKey));
   let uncrypted = decrypt.decrypt(encrypted);
