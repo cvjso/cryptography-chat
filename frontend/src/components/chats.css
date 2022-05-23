@@ -1,11 +1,11 @@
 #mine{
     display: flex;
-    background:  var(--cadet-blue);
+    background:  #4c8fdd;
     width: fit-content;
     margin-left: auto;
     margin-bottom: 10px;
     flex-direction: column;
-    padding: 1.2%;
+    padding: 4px 8px;
     border-radius: 10px;
     border-bottom-right-radius: 0;
 }
@@ -16,21 +16,32 @@
 
 #others{
     display: flex;
-    justify-content: flex-start;
+    background:  var(--eerie-black);
+    width: fit-content;
+    margin-right: auto;
+    margin-bottom: 10px;
+    flex-direction: column;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
 }
 
 .window {
     margin: 0 auto;
-    margin-top: 20vh;
-    width: 50vw;
+    margin-top: 15vh;
+    width: 70vw;
+    height: 60vh;
     box-shadow: 0px 2px 3px 3px rgba(56, 95, 107, 0.349)!important;
-    max-height: 70vh;
+    /* max-height: 70vh; */
     display: flex;
     flex-direction: column;
+    min-height: 42vh;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .window-header {
-    height: 24px;
+    height: 34px;
     background: #4c8fdd;
     color: #fff;
     text-align: center;
@@ -53,18 +64,17 @@
     font-family: "Roboto", sans-serif;
     height: 100%;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .message-container{
     display: flex;
     justify-content:space-evenly;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
+    margin-top: auto;
 }
 
-.message-container input{
-    width: 80%;
-    border-radius: 10px;
-}
 
 .message-button {
     background: url("../imgs/logo.png") no-repeat center center;

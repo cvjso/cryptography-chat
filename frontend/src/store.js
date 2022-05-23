@@ -5,7 +5,8 @@ import { persist } from "zustand/middleware";
 let user = (set) => ({
   isLogged: false,
   login: () => set(() => ({ isLogged: true })),
-  logout: () => set(() => ({ isLogged: false })),
+  logout: () =>
+    set(() => ({ isLogged: false, username: "", communicationKey: "" })),
 
   communicationKey: "",
   setCommunicationKey: (param) => set(() => ({ communicationKey: param })),

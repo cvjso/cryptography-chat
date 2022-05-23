@@ -9,6 +9,7 @@ import { doPost, ROUTES } from "../utils/requests";
 import "./chats.css";
 import { Slide, Button, Input } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCC1AgAz5_Y7k0rPUlxls7rkfAa6rwvJXM",
@@ -28,6 +29,7 @@ export function ChatPage() {
   // Store
   const username = userStore((state) => state.username);
   const communicationKey = userStore((state) => state.communicationKey);
+  const logout = userStore((state) => state.logout);
 
   // Get Messages from Firebase
   const messageRef = firestore.collection("messages");
@@ -72,7 +74,7 @@ export function ChatPage() {
             }}
             onKeyDown={handleKeyPress}
             sx={{
-              width: "80%",
+              width: "75%",
               background: "rgba(255, 255, 255, 0.637)",
               padding: "0px 5px",
               borderTopLeftRadius: "10px",
@@ -85,6 +87,15 @@ export function ChatPage() {
             variant="contained"
           >
             <SendIcon />
+          </Button>
+
+          <Button
+            sx={{ padding: "0", width: "20px!important" }}
+            onClick={logout}
+            variant="outlined"
+            title="Logout"
+          >
+            <ExitToAppIcon />
           </Button>
         </div>
       </div>

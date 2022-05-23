@@ -1,4 +1,5 @@
 from crypt import methods
+import threading
 from flask import Flask, request
 from algoritm import AESCipher, generate_communication_key, RSA_encrypt, get_public_key
 import firebase_admin
@@ -6,6 +7,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import datetime
 from flask_cors import CORS, cross_origin
+import time
 
 cred = credentials.Certificate("./sdk-key.json")
 firebase_admin.initialize_app(cred)
@@ -65,5 +67,15 @@ def send_message():
     # client.collection("messages").document(timestamp).set({"message": data["message"], "author": data["username"], "createdAt": timestamp})
     return "Message sent"
 
+def clean_store():
+    time.sleep(60)
+    docs = client.collection("messages").stream()
+    for doc in docs:
+        print(f'Deleting doc {doc.id} => {doc.to_dict()}')
+        doc.reference.delete()
+    clean_store()
+
 if __name__ == "__main__":
+    t1 = threading.Thread(target=clean_store)
+    t1.start()
     app.run()
