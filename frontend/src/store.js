@@ -14,7 +14,7 @@ let user = (set) => ({
   setUsername: (param) => set(() => ({ username: param })),
 });
 
-// user = persist(user)
+user = persist(user);
 user = devtools(user);
 
 export const userStore = create(user);

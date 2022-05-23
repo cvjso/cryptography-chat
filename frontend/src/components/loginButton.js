@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 import { userStore } from "../store";
 import { doPost, ROUTES } from "../utils/requests";
@@ -18,11 +19,11 @@ export default function LoginButton(props) {
       "public key": publicKey,
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         console.log(decryptRSA(response.data));
         setCommunicationKey(decryptRSA(response.data));
-        login();
         setUsername(props.username);
+        login();
       })
       .catch((error) => console.log(error));
   };
@@ -35,6 +36,16 @@ export default function LoginButton(props) {
     });
   };
 
-  if (isLogged) return <button onClick={makeLogout}>logout</button>;
-  else return <button onClick={makeLogin}>login</button>;
+  if (isLogged)
+    return (
+      <Button variant="contained" onClick={makeLogout}>
+        logout
+      </Button>
+    );
+  else
+    return (
+      <Button variant="contained" onClick={makeLogin}>
+        login
+      </Button>
+    );
 }
