@@ -8,6 +8,7 @@ from firebase_admin import firestore
 from datetime import datetime
 from flask_cors import CORS, cross_origin
 import time
+from os import environ
 
 cred = credentials.Certificate("./sdk-key.json")
 firebase_admin.initialize_app(cred)
