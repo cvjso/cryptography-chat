@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_ADDRESS = "http://127.0.0.1:5000/";
+const BACKEND_ADDRESS = process.env.REACT_APP_BACKEND;
 
 export const ROUTES = {
   login: "login/",

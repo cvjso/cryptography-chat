@@ -74,7 +74,8 @@ export function ChatPage() {
             }}
             onKeyDown={handleKeyPress}
             sx={{
-              width: "75%",
+              width: "100%",
+              marginRight: "2%",
               background: "rgba(255, 255, 255, 0.637)",
               padding: "0px 5px",
               borderTopLeftRadius: "10px",
@@ -82,7 +83,7 @@ export function ChatPage() {
             }}
           />
           <Button
-            sx={{ padding: "0", width: "20px!important" }}
+            sx={{ padding: "0", width: "20px!important", marginRight: "2%" }}
             onClick={sendMessage}
             variant="contained"
           >
