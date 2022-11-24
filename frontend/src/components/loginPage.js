@@ -58,12 +58,14 @@ export default function LoginPage() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           type="text"
+          data-testid="usernameInput"
         />
         <b>Password</b>
         <Input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
+          data-testid="passwordInput"
         />
       </div>
       <LoginButton username={username} password={password} />
