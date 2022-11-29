@@ -29,8 +29,8 @@ jobs:
       - name: INSTALL PROJECT DEPENDENCIES (YARN)
         run: yarn install
 
-      - name: CODE ANALYSE (LINT) AND STYLE-GUIDE ANALYSE (PRETTIER + AIRBNB)
-        run: yarn lint-check
+#       - name: CODE ANALYSE (LINT) AND STYLE-GUIDE ANALYSE (PRETTIER + AIRBNB)
+#         run: yarn lint-check
 
       - name: UNIT TEST (JEST)
         run: yarn test
