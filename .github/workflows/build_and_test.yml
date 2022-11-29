@@ -28,10 +28,10 @@ jobs:
         cache: 'yarn'
     - name: Install dependencies
       run: yarn ci
-      working-directory: frontend
+      working-directory: ./frontend
     - name: Build project
       run: yarn run build --if-present
-      working-directory: frontend
+      working-directory: ./frontend
     - name: Run tests
       run: yarn test
-      working-directory: frontend
+      working-directory: ./frontend
