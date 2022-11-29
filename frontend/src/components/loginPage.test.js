@@ -26,7 +26,7 @@ describe('LoginPage', () => {
     expect(screen.queryByText(label).textContent).toContain(label)
   })
 
-  test('Should show username input', () => {
+  test('Should show username input.', () => {
     customRender()
     expect(screen.getByTestId('usernameInput')).toBeInTheDocument()
   })
