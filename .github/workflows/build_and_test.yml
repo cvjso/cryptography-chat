@@ -26,12 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - name: Install dependencies
-      run: yarn ci
-      working-directory: ./frontend
-    - name: Build project
-      run: yarn run build --if-present
-      working-directory: ./frontend
     - name: Run tests
       run: yarn test
       working-directory: ./frontend
