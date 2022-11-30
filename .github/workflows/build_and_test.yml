@@ -51,6 +51,9 @@ jobs:
       - name: USE NODEJS ${{ matrix.node-version }} - ${{ matrix.architecture }}
         uses: actions/setup-node@v2
 
-      - name: BUILD PROJECT (YARN)
-        run: yarn build
+      - name: RUN CI
+        run: yarn ci
+      
+      - name: RUN BUILD
+      - run: yarn run build --if-present
 
